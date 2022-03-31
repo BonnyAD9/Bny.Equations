@@ -7,11 +7,13 @@ Enables easier working with mathematical functions
 ```
 using Bny.Equations;
 
+// Creating function using delegates
+var de1egate = (double x) => 1 / Math.Pow(x, 2) + 6 * x;
+
+// Creating function using this library
 Variable x = Identifier.X;
+var function = 1 / (x ^ 2) + 6 * x;
 
-var function = 1 / (x ^ 2) + 6 * x; // this library
-
-var de1egate = (double x) => 1 / Math.Pow(x, 2) + 6 * x; // delegate
 
 for (int i = -10; i < 10; i++)
     Console.WriteLine($"f({i,3}) = {function.Eval(i),6:.##} = {de1egate(i):.##}");
