@@ -4,7 +4,7 @@ Enables easier working with mathematical functions
 ## Example
 
 ### Code
-```
+```[C#]
 using Bny.Equations;
 
 // Creating function using delegates
