@@ -51,12 +51,12 @@ f(8) =  57.68 = 57.68
 f(9) =  63.73 = 63.73
 
 Printing funtion:
--10x^-3 +1x^-2 +1x^0.25 8 +6x^1
+-10x^-3 +1x^-2 +1x^0.25 +8 +6x^1
 Printing delegate:
 System.Func`2[System.Double,System.Double]
 
 Benchmark:
-Function: 0.1917458 s / 1000000 runs
-Delegate: 0.0917978 s / 1000000 runs
-Functions are about 2.09 times slower than delegates
+Function: 0.246053 s / 1000000 runs
+Delegate: 0.0945567 s / 1000000 runs
+Functions are about 2.6 times slower than delegates
  */

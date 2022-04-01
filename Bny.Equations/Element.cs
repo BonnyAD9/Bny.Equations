@@ -3,18 +3,8 @@
 /// <summary>
 /// Variable raised to a power and multiplied by a coefficient
 /// </summary>
-public readonly struct Element : IEquatable<Element>
+public class Element : Operation, IEquatable<Element>
 {
-    /// <summary>
-    /// Coefficient (multiplier) of the variable
-    /// </summary>
-    public Number Coefficient { get; init; }
-
-    /// <summary>
-    /// Power to which the variable is raised
-    /// </summary>
-    public Number Power { get; init; }
-
     /// <summary>
     /// Variable that is in this element
     /// </summary>
@@ -67,10 +57,8 @@ public readonly struct Element : IEquatable<Element>
     /// <param name="coefficient">Multiplier</param>
     /// <param name="variable">Variable</param>
     /// <param name="power">Power to which the variable will be raised</param>
-    public Element(Number coefficient, Variable variable, Number power)
+    public Element(Number coefficient, Variable variable, Number power) : base(coefficient, power)
     {
-        Coefficient = coefficient;
-        Power = power;
         Variable = Coefficient == Number.Zero || power == Number.Zero ? Variable.Invalid : variable;
     }
 
@@ -107,7 +95,7 @@ public readonly struct Element : IEquatable<Element>
     /// </summary>
     /// <param name="n">Value for variable</param>
     /// <returns>Evaluated value</returns>
-    public Number Evaluate(Number n) => IsConstant ? Coefficient : Coefficient * (n ^ Power);
+    public override Number Evaluate(Number n) => IsConstant ? Coefficient : Coefficient * (n ^ Power);
 
     public static bool operator ==(Element a, Element b) => a.Variable == b.Variable && a.Coefficient == b.Coefficient && a.Power == b.Power;
     public static bool operator !=(Element a, Element b) => a.Variable != b.Variable || a.Coefficient != b.Coefficient || a.Power != b.Power;
@@ -153,9 +141,18 @@ public readonly struct Element : IEquatable<Element>
     public static Element operator /(double a, Element b) => new(a / b.Coefficient, b.Variable, -b.Power);
     public static Element operator /(int a, Element b) => new(a / b.Coefficient, b.Variable, -b.Power);
 
-    public bool Equals(Element other) => this == other;
+    public bool Equals(Element? other) => other is not null && this == other;
     public override bool Equals(object? obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();
 
-    public override string ToString() => IsConstant ? Coefficient.ToString("0.##") : $"{(Coefficient > 0 ? "+" : "")}{Coefficient:0.##}{Variable}^{Power:0.##}";
+    public override string ToString() => IsConstant ? $"{(Coefficient > 0 ? "+" : "")}{Coefficient:0.##}" : $"{(Coefficient > 0 ? "+" : "")}{Coefficient:0.##}{Variable}^{Power:0.##}";
+
+    public override Operation With(Number coeffitient, Number power) => new Element(coeffitient, Variable, power);
+
+    public override bool IsSame(Operation other) => other is Element o && o.Variable == Variable;
+
+    public override string ToString(string? format, IFormatProvider? formatProvider)
+        => IsConstant
+            ? $"{(Coefficient > 0 ? "+" : "")}{Coefficient.ToString(format, formatProvider)}"
+            : $"{(Coefficient > 0 ? "+" : "")}{Coefficient.ToString(format, formatProvider)}{Variable}^{Power.ToString(format, formatProvider):0.##}";
 }

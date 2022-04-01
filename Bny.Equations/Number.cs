@@ -143,7 +143,7 @@ public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Num
     public static explicit operator int(Number value) => (int)value.Value;
 
     public override string ToString() => Value.ToString();
-    public string ToString(string format, IFormatProvider formatProvider) => Value.ToString(format, formatProvider);
+    public string ToString(string? format, IFormatProvider? formatProvider) => Value.ToString(format, formatProvider);
     public string ToString(IFormatProvider formatProvider) => Value.ToString(formatProvider);
     public string ToString(string format) => Value.ToString(format);
     public override bool Equals(object? obj) => Value.Equals(obj);

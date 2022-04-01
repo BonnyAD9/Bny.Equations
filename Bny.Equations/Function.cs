@@ -4,8 +4,9 @@ namespace Bny.Equations;
 
 public class Function
 {
-    private LinkedList<Element> Elements { get; init; }
-    private LinkedListNode<Element> Constant { get; init; }
+    private LinkedList<Operation> Elements { get; init; }
+    private LinkedListNode<Operation> Constant { get; init; }
+    private Num CNum => (Constant.Value as Num)!;
 
     /// <summary>
     /// Creates empty function
@@ -13,22 +14,22 @@ public class Function
     public Function()
     {
         Elements = new();
-        Constant = Elements.AddFirst(new Element());
+        Constant = Elements.AddFirst(new Num());
     }
 
     /// <summary>
     /// Creates function with one value
     /// </summary>
     /// <param name="value"></param>
-    public Function(Element value)
+    public Function(Operation value)
     {
         Elements = new();
-        if (value.IsConstant)
+        if (value is Num)
         {
             Constant = Elements.AddFirst(value);
             return;
         }
-        Constant = Elements.AddFirst(new Element());
+        Constant = Elements.AddFirst(new Num());
         Add(value);
     }
 
@@ -42,13 +43,13 @@ public class Function
 
         if (f.Elements.Count == 0)
         {
-            Constant = Elements.AddFirst(new Element());
+            Constant = Elements.AddFirst(new Num());
             return;
         }
 
         foreach (var e in f.Elements)
         {
-            if (e.IsConstant)
+            if (e is Num)
             {
                 Constant = Elements.AddLast(e);
                 continue;
@@ -57,23 +58,23 @@ public class Function
         }
 
         if (Constant is null)
-            Constant = AddRight(new(), Elements.First!);
+            Constant = AddRight(new Num(), Elements.First!);
     }
 
-    private Function(LinkedList<Element> elements, LinkedListNode<Element> constant)
+    private Function(LinkedList<Operation> elements, LinkedListNode<Operation> constant)
     {
         Elements = elements;
         Constant = constant;
     }
 
-    public Function(Variable v, Number n) : this(new Element(n), new Element(v)) { }
+    public Function(Variable v, Number n) : this(new Num(n), new Element(v)) { }
 
     /// <summary>
     /// Initializes function from two elements that will be added
     /// </summary>
     /// <param name="e1">First element</param>
     /// <param name="e2">Second element</param>
-    public Function(Element e1, Element e2) : this(e1) => Add(e2);
+    public Function(Operation e1, Operation e2) : this(e1) => Add(e2);
 
     /// <summary>
     /// Adds element and variable
@@ -87,7 +88,7 @@ public class Function
     /// </summary>
     /// <param name="f">Function that will be copied</param>
     /// <param name="e">New element</param>
-    public Function(Function f, Element e) : this(f) => Add(e);
+    public Function(Function f, Operation e) : this(f) => Add(e);
 
     /// <summary>
     /// Creates new function from other function with added variable
@@ -115,15 +116,15 @@ public class Function
     /// </summary>
     /// <param name="e">Element</param>
     /// <param name="n">Number to add</param>
-    public Function(Element e, Number n)
+    public Function(Operation e, Number n)
     {
         Elements = new();
-        if (e.IsConstant)
+        if (e is Num num)
         {
-            Constant = Elements.AddFirst(e with { Coefficient = e.Coefficient + n });
+            Constant = Elements.AddFirst(num + CNum);
             return;
         }
-        Constant = Elements.AddFirst(new Element(n));
+        Constant = Elements.AddFirst(new Num(n));
         Add(e);
     }
 
@@ -145,14 +146,14 @@ public class Function
     /// </summary>
     /// <param name="value">Function to add to this function</param>
     /// <returns>Instance on which this method was called</returns>
-    public Function Add(Function value)
+    internal Function Add(Function value)
     {
-        LinkedListNode<Element>? ocur = value.Elements.First;
-        LinkedListNode<Element> tcur = Elements.First!;
+        LinkedListNode<Operation>? ocur = value.Elements.First;
+        LinkedListNode<Operation> tcur = Elements.First!;
 
         while (ocur is not null)
         {
-            if (Element.TryAdd(tcur.Value, ocur.Value, out Element e))
+            if (Operation.TryAdd(tcur.Value, ocur.Value, out Operation? e))
             {
                 tcur.Value = e;
                 ocur = ocur.Next;
@@ -182,9 +183,9 @@ public class Function
     /// </summary>
     /// <param name="value"></param>
     /// <returns>Instance on which this method was called</returns>
-    public Function Add(Number value)
+    internal Function Add(Number value)
     {
-        Constant.Value = Constant.Value with { Coefficient = Constant.Value.Coefficient + value };
+        Constant.Value = CNum + value;
         return this;
     }
 
@@ -193,9 +194,9 @@ public class Function
     /// </summary>
     /// <param name="value">Element to insert</param>
     /// <returns>Instance on which this method was called</returns>
-    public Function Add(Element value)
+    internal Function Add(Operation value)
     {
-        if (Element.TryAdd(value, Constant.Value, out Element r))
+        if (Operation.TryAdd(value, Constant.Value, out Operation? r))
         {
             Constant.Value = r;
             return this;
@@ -212,10 +213,10 @@ public class Function
         return this;
     }
 
-    protected LinkedListNode<Element> AddLeft(Element value, LinkedListNode<Element> node) => AddLeft(value, node, Elements);
-    protected static LinkedListNode<Element> AddLeft(Element value, LinkedListNode<Element> node, LinkedList<Element> elements)
+    protected LinkedListNode<Operation> AddLeft(Operation value, LinkedListNode<Operation> node) => AddLeft(value, node, Elements);
+    protected static LinkedListNode<Operation> AddLeft(Operation value, LinkedListNode<Operation> node, LinkedList<Operation> elements)
     {
-        if (Element.TryAdd(value, node.Value, out Element r))
+        if (Operation.TryAdd(value, node.Value, out Operation? r))
         {
             node.Value = r;
             return node;
@@ -230,10 +231,10 @@ public class Function
         return AddLeft(value, node.Previous, elements);
     }
 
-    protected LinkedListNode<Element> AddRight(Element value, LinkedListNode<Element> node) => AddRight(value, node, Elements);
-    protected static LinkedListNode<Element> AddRight(Element value, LinkedListNode<Element> node, LinkedList<Element> elements)
+    protected LinkedListNode<Operation> AddRight(Operation value, LinkedListNode<Operation> node) => AddRight(value, node, Elements);
+    protected static LinkedListNode<Operation> AddRight(Operation value, LinkedListNode<Operation> node, LinkedList<Operation> elements)
     {
-        if (Element.TryAdd(value, node.Value, out Element r))
+        if (Operation.TryAdd(value, node.Value, out Operation? r))
         {
             node.Value = r;
             return node;
@@ -255,16 +256,16 @@ public class Function
     /// <returns></returns>
     public static Function Negate(Function a)
     {
-        LinkedList<Element> elements = new();
+        LinkedList<Operation> elements = new();
 
         if (a.Elements.Count == 0)
-            return new(elements, elements.AddFirst(new Element()));
+            return new(elements, elements.AddFirst(new Num()));
 
-        LinkedListNode<Element>? constant = null;
+        LinkedListNode<Operation>? constant = null;
 
         foreach (var e in a.Elements)
         {
-            if (e.IsConstant)
+            if (e is Num)
             {
                 constant = elements.AddLast(e);
                 continue;
@@ -275,29 +276,29 @@ public class Function
         if (constant is not null)
              return new(elements, constant);
 
-        return new(elements, AddRight(new(), elements.First!, elements));
+        return new(elements, AddRight(new Num(), elements.First!, elements));
     }
 
     public static Function operator +(Function a, Function b) => new(a, b);
     public static Function operator +(Function a, Variable b) => new(a, b);
-    public static Function operator +(Function a, Element b) => new(a, b);
+    public static Function operator +(Function a, Operation b) => new(a, b);
     public static Function operator +(Function a, Number b) => new(a, b);
     public static Function operator +(Function a, double b) => new(a, b);
     public static Function operator +(Function a, int b) => new(a, b);
     public static Function operator +(Variable a, Function b) => new(b, a);
-    public static Function operator +(Element a, Function b) => new(b, a);
+    public static Function operator +(Operation a, Function b) => new(b, a);
     public static Function operator +(Number a, Function b) => new(b, a);
     public static Function operator +(double a, Function b) => new(b, a);
     public static Function operator +(int a, Function b) => new(b, a);
     public static Function operator -(Function a, Function b) => Negate(b).Add(a);
     public static Function operator -(Function a, Variable b) => new(a, -b);
-    public static Function operator -(Function a, Element b) => new(a, -b);
+    public static Function operator -(Function a, Operation b) => new(a, -b);
     public static Function operator -(Function a, Number b) => new(a, -b);
     public static Function operator -(Function a, double b) => new(a, -b);
     public static Function operator -(Function a, int b) => new(a, -b);
     public static Function operator -(Function a) => Negate(a);
     public static Function operator -(Variable a, Function b) => Negate(b).Add(new Element(a));
-    public static Function operator -(Element a, Function b) => Negate(b).Add(a);
+    public static Function operator -(Operation a, Function b) => Negate(b).Add(a);
     public static Function operator -(Number a, Function b) => Negate(b).Add(a);
     public static Function operator -(double a, Function b) => Negate(b).Add(a);
     public static Function operator -(int a, Function b) => Negate(b).Add(a);
