@@ -107,7 +107,7 @@ public readonly struct Element : IEquatable<Element>
     /// </summary>
     /// <param name="n">Value for variable</param>
     /// <returns>Evaluated value</returns>
-    public Number Evaluate(Number n) => Coefficient * (n ^ Power);
+    public Number Evaluate(Number n) => IsConstant ? Coefficient : Coefficient * (n ^ Power);
 
     public static bool operator ==(Element a, Element b) => a.Variable == b.Variable && a.Coefficient == b.Coefficient && a.Power == b.Power;
     public static bool operator !=(Element a, Element b) => a.Variable != b.Variable || a.Coefficient != b.Coefficient || a.Power != b.Power;
@@ -116,28 +116,36 @@ public readonly struct Element : IEquatable<Element>
     public static bool operator <=(Element a, Element b) => a.Power <= b.Power;
     public static bool operator >=(Element a, Element b) => a.Power >= b.Power;
     public static Function operator +(Element a, Element b) => new(a, b);
-    public static Function operator +(Element a, Number b) => new(new(b), a);
-    public static Function operator +(Element a, Variable b) => new(new(b), a);
-    public static Function operator +(Element a, double b) => new(new(b), a);
-    public static Function operator +(Element a, int b) => new(new(b), a);
+    public static Function operator +(Element a, Number b) => new(a, b);
+    public static Function operator +(Element a, Variable b) => new(a, b);
+    public static Function operator +(Element a, double b) => new(a, b);
+    public static Function operator +(Element a, int b) => new(a, b);
+    public static Function operator +(Variable a, Element b) => new(b, a);
+    public static Function operator +(Number a, Element b) => new(b, a);
+    public static Function operator +(double a, Element b) => new(b, a);
+    public static Function operator +(int a, Element b) => new(b, a);
     public static Element operator -(Element a) => new(-a.Coefficient, a.Variable, a.Power);
     public static Function operator -(Element a, Element b) => new(a, -b);
-    public static Function operator -(Element a, Number b) => new(new(-b), a);
-    public static Function operator -(Element a, Variable b) => new(-b, a);
-    public static Function operator -(Element a, double b) => new(new(-b), a);
-    public static Function operator -(Element a, int b) => new(new(-b), a);
-    public static Function operator -(Number a, Element b) => new(new(a), -b);
-    public static Function operator -(Variable a, Element b) => new(new(a), -b);
-    public static Function operator -(double a, Element b) => new(new(a), -b);
-    public static Function operator -(int a, Element b) => new(new(a), -b);
+    public static Function operator -(Element a, Number b) => new(a, -b);
+    public static Function operator -(Element a, Variable b) => new(a, -b);
+    public static Function operator -(Element a, double b) => new(a, -b);
+    public static Function operator -(Element a, int b) => new(a, -b);
+    public static Function operator -(Number a, Element b) => new(-b, a);
+    public static Function operator -(Variable a, Element b) => new(-b, a);
+    public static Function operator -(double a, Element b) => new(-b, a);
+    public static Function operator -(int a, Element b) => new(-b, a);
     public static Element operator *(Element a, Element b) => new(a.Coefficient * b.Coefficient, a.Variable, a.Power + b.Power);
     public static Element operator *(Element a, Number b) => new(a.Coefficient * b, a.Variable, a.Power);
     public static Element operator *(Element a, Variable _) => new(a.Coefficient, a.Variable, a.Power + 1);
     public static Element operator *(Element a, double b) => new(a.Coefficient * b, a.Variable, a.Power);
     public static Element operator *(Element a, int b) => new(a.Coefficient * b, a.Variable, a.Power);
+    public static Element operator *(Variable _, Element b) => new(b.Coefficient, b.Variable, b.Power + 1);
+    public static Element operator *(Number a, Element b) => new(a * b.Coefficient, b.Variable, b.Power);
+    public static Element operator *(double a, Element b) => new(a * b.Coefficient, b.Variable, b.Power);
+    public static Element operator *(int a, Element b) => new(a * b.Coefficient, b.Variable, b.Power);
     public static Element operator /(Element a, Element b) => new(a.Coefficient / b.Coefficient, a.Variable, a.Power - b.Power);
     public static Element operator /(Element a, Number b) => new(a.Coefficient / b, a.Variable, a.Power);
-    public static Element operator /(Element a, Variable b) => new(a.Coefficient, a.Variable, a.Power - 1);
+    public static Element operator /(Element a, Variable _) => new(a.Coefficient, a.Variable, a.Power - 1);
     public static Element operator /(Element a, double b) => new(a.Coefficient / b, a.Variable, a.Power);
     public static Element operator /(Element a, int b) => new(a.Coefficient / b, a.Variable, a.Power);
     public static Element operator /(Number a, Element b) => new(a / b.Coefficient, b.Variable, -b.Power);
@@ -148,4 +156,6 @@ public readonly struct Element : IEquatable<Element>
     public bool Equals(Element other) => this == other;
     public override bool Equals(object? obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();
+
+    public override string ToString() => IsConstant ? Coefficient.ToString("0.##") : $"{(Coefficient > 0 ? "+" : "")}{Coefficient:0.##}{Variable}^{Power:0.##}";
 }

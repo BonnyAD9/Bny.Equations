@@ -43,6 +43,8 @@ public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Num
     public static Number operator +(Number a, Number b) => new(a.Value + b.Value);
     public static Number operator +(Number a, double b) => new(a.Value + b);
     public static Number operator +(Number a, int b) => new(a.Value + b);
+    public static Number operator +(double a, Number b) => new(a + b.Value);
+    public static Number operator +(int a, Number b) => new(a + b.Value);
     public static Number operator -(Number a, Number b) => new(a.Value - b.Value);
     public static Number operator -(Number a, double b) => new(a.Value - b);
     public static Number operator -(double a, Number b) => new(a + b.Value);
@@ -52,6 +54,8 @@ public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Num
     public static Number operator *(Number a, Number b) => new(a.Value * b.Value);
     public static Number operator *(Number a, double b) => new(a.Value * b);
     public static Number operator *(Number a, int b) => new(a.Value * b);
+    public static Number operator *(double a, Number b) => new(a * b.Value);
+    public static Number operator *(int a, Number b) => new(a * b.Value);
     public static Number operator /(Number a, Number b) => new(a.Value / b.Value);
     public static Number operator /(Number a, double b) => new(a.Value / b);
     public static Number operator /(double a, Number b) => new(a / b.Value);
@@ -89,35 +93,35 @@ public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Num
     /// <param name="a">Number to raise</param>
     /// <param name="b">Power to which to raise</param>
     /// <returns>New number</returns>
-    public static Number operator ^(Number a, Number b) => Pow(a.Value, b.Value);
+    public static Number operator ^(Number a, Number b) => Pow(a, b);
     /// <summary>
     /// Raises number to the given power
     /// </summary>
     /// <param name="a">Number to raise</param>
     /// <param name="b">Power to which to raise</param>
     /// <returns>New number</returns>
-    public static Number operator ^(Number a, double b) => Pow(a.Value, b);
+    public static Number operator ^(Number a, double b) => Pow(a, b);
     /// <summary>
     /// Raises number to the given power
     /// </summary>
     /// <param name="a">Number to raise</param>
     /// <param name="b">Power to which to raise</param>
     /// <returns>New number</returns>
-    public static Number operator ^(double a, Number b) => Pow(a, b.Value);
+    public static Number operator ^(double a, Number b) => Pow(a, b);
     /// <summary>
     /// Raises number to the given power
     /// </summary>
     /// <param name="a">Number to raise</param>
     /// <param name="b">Power to which to raise</param>
     /// <returns>New number</returns>
-    public static Number operator ^(Number a, int b) => Pow(a.Value, b);
+    public static Number operator ^(Number a, int b) => Pow(a, b);
     /// <summary>
     /// Raises number to the given power
     /// </summary>
     /// <param name="a">Number to raise</param>
     /// <param name="b">Power to which to raise</param>
     /// <returns>New number</returns>
-    public static Number operator ^(int a, Number b) => Pow(a, b.Value);
+    public static Number operator ^(int a, Number b) => Pow(a, b);
     /// <summary>
     /// Calculates the inverse of the number (1 / a)
     /// </summary>

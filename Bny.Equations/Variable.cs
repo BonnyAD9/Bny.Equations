@@ -49,6 +49,24 @@ public class Variable
     public static bool operator ==(Variable a, Variable b) => a.ID == b.ID;
     public static bool operator !=(Variable a, Variable b) => a.ID != b.ID;
     public static Element operator -(Variable v) => new(-1, v);
+    public static Element operator +(Variable a, Variable _) => new(2, a);
+    public static Function operator +(Variable a, Number b) => new(a, b);
+    public static Function operator +(Variable a, double b) => new(a, b);
+    public static Function operator +(Variable a, int b) => new(a, b);
+    public static Function operator +(Number a, Variable b) => new(b, a);
+    public static Function operator +(double a, Variable b) => new(b, a);
+    public static Function operator +(int a, Variable b) => new(b, a);
+    public static Number operator -(Variable _, Variable __) => Number.Zero;
+    public static Function operator -(Variable a, Number b) => new(a, -b);
+    public static Function operator -(Variable a, double b) => new(a, -b);
+    public static Function operator -(Variable a, int b) => new(a, -b);
+    public static Function operator -(Number a, Variable b) => new(new Element(-1, b), a);
+    public static Function operator -(double a, Variable b) => new(new Element(-1, b), a);
+    public static Function operator -(int a, Variable b) => new(new Element(-1, b), a);
+    public static Element operator *(Variable a, Variable _) => new(a, 2);
+    public static Element operator *(Variable a, Number b) => new(a, b);
+    public static Element operator *(Variable a, double b) => new(a, b);
+    public static Element operator *(Variable a, int b) => new(a, b);
     public static Element operator *(Number a, Variable v) => new(a, v);
     public static Element operator *(double a, Variable v) => new(a, v);
     public static Element operator *(int a, Variable v) => new(a, v);
@@ -84,5 +102,5 @@ public class Variable
 
     public override bool Equals(object? obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();
-    public override string ToString() => $"[?{ID}]";
+    public override string ToString() => ID.ToString().ToLower();
 }
