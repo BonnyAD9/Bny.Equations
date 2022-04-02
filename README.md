@@ -1,8 +1,11 @@
 # Bny.Equations
 Makes it easier to wirk with mathematical functions.
 
-## Example
+## What is supported
+Functions: evaluation
+- Power series
 
+## Example
 ### Code
 ```[C#]
 using Bny.Equations;
