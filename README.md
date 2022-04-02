@@ -1,5 +1,5 @@
 # Bny.Equations
-Enables easier working with mathematical functions
+Makes it easier to wirk with mathematical functions.
 
 ## Example
 
