@@ -2,7 +2,7 @@
 Makes it easier to wirk with mathematical functions.
 
 ## What is supported
-Functions (evaluation):
+Functions (1 variable, evaluation):
 - Power series
 
 ## Example
