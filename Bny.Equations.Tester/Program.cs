@@ -56,7 +56,7 @@ Printing delegate:
 System.Func`2[System.Double,System.Double]
 
 Benchmark:
-Function: 0.246053 s / 1000000 runs
-Delegate: 0.0945567 s / 1000000 runs
-Functions are about 2.6 times slower than delegates
+Function: 0.2605436 s / 1000000 runs
+Delegate: 0.0906862 s / 1000000 runs
+Functions are about 2.87 times slower than delegates
  */

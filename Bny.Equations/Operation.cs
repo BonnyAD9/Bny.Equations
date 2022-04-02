@@ -5,7 +5,7 @@ namespace Bny.Equations;
 /// <summary>
 /// Represents mathematical operation
 /// </summary>
-public abstract class Operation : IFormattable
+public abstract class Operation : IFormattable, IEvaluatable
 {
     /// <summary>
     /// Multiplier of a value
@@ -35,12 +35,10 @@ public abstract class Operation : IFormattable
     /// <returns>New Operation of the same type that derives it</returns>
     public abstract Operation With(Number coefficient, Number power);
 
-    /// <summary>
-    /// Evaluates this operation with the given value as variable
-    /// </summary>
-    /// <param name="n">Value for variables</param>
-    /// <returns>Evaluated result</returns>
-    public abstract Number Evaluate(Number n);
+    public abstract Number Eval(Number n);
+    public abstract bool TryEval(out Number res);
+    public abstract Number EvalUnset(Number var);
+
     /// <summary>
     /// Gets value indicating whether the body of this instance is same as the other
     /// </summary>

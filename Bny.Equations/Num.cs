@@ -15,7 +15,13 @@ public class Num : Operation
     /// <param name="n"></param>
     public Num(Number n) : base(n, Number.One) { }
 
-    public override Number Evaluate(Number _) => Coefficient;
+    public override Number Eval(Number _) => Coefficient;
+    public override bool TryEval(out Number res)
+    {
+        res = Coefficient;
+        return true;
+    }
+    public override Number EvalUnset(Number var) => Coefficient;
     public override bool IsSame(Operation other) => other is Num;
     public override Operation With(Number coeffitient, Number power) => new Num(coeffitient);
 

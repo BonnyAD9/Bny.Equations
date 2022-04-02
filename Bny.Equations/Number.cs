@@ -3,7 +3,7 @@
 /// <summary>
 /// Immutable structure indicating number
 /// </summary>
-public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Number>, IFormattable
+public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Number>, IFormattable, IEvaluatable
 {
     /// <summary>
     /// Value of the number
@@ -34,6 +34,14 @@ public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Num
     /// Creates invalid number
     /// </summary>
     public static readonly Number NaN = new(double.NaN);
+
+    public Number Eval(Number _) => Value;
+    public bool TryEval(out Number res)
+    {
+        res = Value;
+        return true;
+    }
+    public Number EvalUnset(Number _) => Value;
 
     public static Number Abs(Number value) => new(Math.Abs(value.Value));
     public static Number Pow(Number value) => new(Math.Pow(value.Value, 2));

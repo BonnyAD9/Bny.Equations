@@ -2,7 +2,7 @@
 
 namespace Bny.Equations;
 
-public class Function
+public class Function : IEvaluatable
 {
     private LinkedList<Operation> Elements { get; init; }
     private LinkedListNode<Operation> Constant { get; init; }
@@ -128,16 +128,31 @@ public class Function
         Add(e);
     }
 
-    /// <summary>
-    /// Evaluates this function with the given value as value of variables
-    /// </summary>
-    /// <param name="n">Value of variables</param>
-    /// <returns>Calculated result</returns>
     public Number Eval(Number n)
     {
         Number res = Number.Zero;
         foreach (var e in Elements)
-            res += e.Evaluate(n);
+            res += e.Eval(n);
+        return res;
+    }
+
+    public bool TryEval(out Number res)
+    {
+        res = Number.Zero;
+        foreach (var e in Elements)
+        {
+            if (!e.TryEval(out Number r))
+                return false;
+            res += r;
+        }
+        return true;
+    }
+
+    public Number EvalUnset(Number n)
+    {
+        Number res = Number.Zero;
+        foreach (var e in Elements)
+            res += e.EvalUnset(n);
         return res;
     }
 

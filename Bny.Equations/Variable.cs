@@ -3,7 +3,7 @@
 /// <summary>
 /// Variable
 /// </summary>
-public class Variable
+public class Variable : IEvaluatable
 {
     /// <summary>
     /// Name of the variable should be unique for the equation
@@ -103,4 +103,14 @@ public class Variable
     public override bool Equals(object? obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();
     public override string ToString() => ID.ToString().ToLower();
+
+    public bool TryEval(out Number res)
+    {
+        res = Value;
+        return HasValue;
+    }
+
+    public Number Eval(Number var) => var;
+
+    public Number EvalUnset(Number var) => HasValue ? Value : var;
 }

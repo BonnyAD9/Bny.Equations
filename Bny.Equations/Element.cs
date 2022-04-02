@@ -18,7 +18,7 @@ public class Element : Operation, IEquatable<Element>
     /// <summary>
     /// Returns value indicating whether the variable has set value and this element can be evaluated
     /// </summary>
-    public bool IsEvaluatable => IsConstant || Variable.HasValue;
+    public bool IsEvaluatable => Variable.HasValue;
 
     /// <summary>
     /// Creates zero
@@ -84,18 +84,20 @@ public class Element : Operation, IEquatable<Element>
         return true;
     }
 
-    /// <summary>
-    /// Evaluates this element if it is evaluatable
-    /// </summary>
-    /// <returns>Evaluated value if possible, otherwise Number.NaN</returns>
-    public Number Evaluate() => IsEvaluatable ? Coefficient * (Variable.Value ^ Power) : Number.NaN;
+    public override bool TryEval(out Number res)
+    {
+        if (IsEvaluatable)
+        {
+            res = Coefficient * (Variable.Value ^ Power);
+            return true;
+        }
+        res = Number.NaN;
+        return false;
+    }
 
-    /// <summary>
-    /// Evaluates this element with the given value of variable
-    /// </summary>
-    /// <param name="n">Value for variable</param>
-    /// <returns>Evaluated value</returns>
-    public override Number Evaluate(Number n) => IsConstant ? Coefficient : Coefficient * (n ^ Power);
+    public override Number EvalUnset(Number var) => Coefficient * (Variable.EvalUnset(var) ^ Power);
+
+    public override Number Eval(Number n) => IsConstant ? Coefficient : Coefficient * (n ^ Power);
 
     public static bool operator ==(Element a, Element b) => a.Variable == b.Variable && a.Coefficient == b.Coefficient && a.Power == b.Power;
     public static bool operator !=(Element a, Element b) => a.Variable != b.Variable || a.Coefficient != b.Coefficient || a.Power != b.Power;
