@@ -104,13 +104,5 @@ public class Variable : IEvaluatable
     public override int GetHashCode() => base.GetHashCode();
     public override string ToString() => ID.ToString().ToLower();
 
-    public bool TryEval(out Number res)
-    {
-        res = Value;
-        return HasValue;
-    }
-
-    public Number Eval(Number var) => var;
-
-    public Number EvalUnset(Number var) => HasValue ? Value : var;
+    public Number Eval(ValueGetter vg) => vg(this);
 }

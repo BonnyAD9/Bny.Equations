@@ -35,9 +35,7 @@ public abstract class Operation : IFormattable, IEvaluatable
     /// <returns>New Operation of the same type that derives it</returns>
     public abstract Operation With(Number coefficient, Number power);
 
-    public abstract Number Eval(Number n);
-    public abstract bool TryEval(out Number res);
-    public abstract Number EvalUnset(Number var);
+    public abstract Number Eval(ValueGetter vg);
 
     /// <summary>
     /// Gets value indicating whether the body of this instance is same as the other

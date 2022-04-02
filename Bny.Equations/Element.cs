@@ -84,20 +84,7 @@ public class Element : Operation, IEquatable<Element>
         return true;
     }
 
-    public override bool TryEval(out Number res)
-    {
-        if (IsEvaluatable)
-        {
-            res = Coefficient * (Variable.Value ^ Power);
-            return true;
-        }
-        res = Number.NaN;
-        return false;
-    }
-
-    public override Number EvalUnset(Number var) => Coefficient * (Variable.EvalUnset(var) ^ Power);
-
-    public override Number Eval(Number n) => IsConstant ? Coefficient : Coefficient * (n ^ Power);
+    public override Number Eval(ValueGetter vg) => IsConstant ? Coefficient : Coefficient * (vg(Variable) ^ Power);
 
     public static bool operator ==(Element a, Element b) => a.Variable == b.Variable && a.Coefficient == b.Coefficient && a.Power == b.Power;
     public static bool operator !=(Element a, Element b) => a.Variable != b.Variable || a.Coefficient != b.Coefficient || a.Power != b.Power;

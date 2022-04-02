@@ -128,31 +128,11 @@ public class Function : IEvaluatable
         Add(e);
     }
 
-    public Number Eval(Number n)
+    public Number Eval(ValueGetter vg)
     {
         Number res = Number.Zero;
         foreach (var e in Elements)
-            res += e.Eval(n);
-        return res;
-    }
-
-    public bool TryEval(out Number res)
-    {
-        res = Number.Zero;
-        foreach (var e in Elements)
-        {
-            if (!e.TryEval(out Number r))
-                return false;
-            res += r;
-        }
-        return true;
-    }
-
-    public Number EvalUnset(Number n)
-    {
-        Number res = Number.Zero;
-        foreach (var e in Elements)
-            res += e.EvalUnset(n);
+            res += e.Eval(vg);
         return res;
     }
 
