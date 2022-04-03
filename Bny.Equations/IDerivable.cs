@@ -12,7 +12,5 @@ internal interface IDerivable<T> where T : class
     /// <param name="v">Variable over which will be derived</param>
     /// <param name="derivative">Result of the derivation, null if the derivation cannot be done or if the result of derivation is 0</param>
     /// <returns>true on succes, otherwise false</returns>
-    public bool TryDerive(VariablePredicate v, out T? derivative);
+    public bool TryDerive(Func<Variable, bool> v, out T? derivative);
 }
-
-public delegate bool VariablePredicate(Variable v);

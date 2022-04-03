@@ -12,15 +12,8 @@ public interface IExpressable
     /// </summary>
     /// <param name="p">Gets the expression for variables</param>
     /// <returns>Expression of this</returns>
-    public Expression ToExpression(VariableGetter p);
+    public Expression ToExpression(Func<Variable, Expression> p);
 }
-
-/// <summary>
-/// Gets the correct expression for this variable
-/// </summary>
-/// <param name="v">Variable for which the expression will be get</param>
-/// <returns>Expression representing that variable</returns>
-public delegate Expression VariableGetter(Variable v);
 
 /// <summary>
 /// Provides useful extensions for IExpressable

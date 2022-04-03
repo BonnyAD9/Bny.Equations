@@ -129,7 +129,7 @@ public class Function : IEvaluatable, IExpressable
         Add(e);
     }
 
-    public Number Eval(ValueGetter vg)
+    public Number Eval(Func<Variable, Number> vg)
     {
         Number res = Number.Zero;
         foreach (var e in Elements)
@@ -137,7 +137,7 @@ public class Function : IEvaluatable, IExpressable
         return res;
     }
 
-    public Expression ToExpression(VariableGetter p)
+    public Expression ToExpression(Func<Variable, Expression> p)
     {
         Expression e = CNum.ToExpression(p);
         foreach (var el in Elements)

@@ -86,9 +86,9 @@ public class Element : Operation, IEquatable<Element>
         return true;
     }
 
-    public override Number Eval(ValueGetter vg) => IsConstant ? Coefficient : Coefficient * (vg(Variable) ^ Power);
+    public override Number Eval(Func<Variable, Number> vg) => IsConstant ? Coefficient : Coefficient * (vg(Variable) ^ Power);
 
-    public override Expression ToExpression(VariableGetter p)
+    public override Expression ToExpression(Func<Variable, Expression> p)
     {
         if (IsConstant || Power == Number.Zero)
             return Expression.Constant(Coefficient.Value, typeof(double));
@@ -99,7 +99,7 @@ public class Element : Operation, IEquatable<Element>
         return Expression.Multiply(coef, call);
     }
 
-    public override bool TryDerive(VariablePredicate predicate, out Operation? derivative)
+    public override bool TryDerive(Func<Variable, bool> predicate, out Operation? derivative)
     {
         if (!predicate(Variable))
         {

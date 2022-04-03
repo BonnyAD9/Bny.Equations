@@ -7,10 +7,8 @@ public interface IEvaluatable
     /// </summary>
     /// <param name="getter">Function that gets value from variable</param>
     /// <returns>Evaluated result</returns>
-    public Number Eval(ValueGetter getter);
+    public Number Eval(Func<Variable, Number> getter);
 }
-
-public delegate Number ValueGetter(Variable v);
 
 public static class EvaluatableExtensions
 {

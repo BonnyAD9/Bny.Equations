@@ -48,11 +48,11 @@ public class Variable : IEvaluatable, IExpressable, IDerivable<Num>
         Value = id == VID.Invalid ? Number.One : value;
     }
 
-    public Number Eval(ValueGetter vg) => vg(this);
+    public Number Eval(Func<Variable, Number> vg) => vg(this);
 
-    public Expression ToExpression(VariableGetter p) => p(this);
+    public Expression ToExpression(Func<Variable, Expression> p) => p(this);
 
-    public bool TryDerive(VariablePredicate predicate, out Num? derivative)
+    public bool TryDerive(Func<Variable, bool> predicate, out Num? derivative)
     {
         derivative = predicate(this) ? new(1) : null;
         return true;

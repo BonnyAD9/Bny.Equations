@@ -35,7 +35,7 @@ public readonly struct Number : IComparable, IComparable<Number>, IEquatable<Num
     /// </summary>
     public static readonly Number NaN = new(double.NaN);
 
-    public Number Eval(ValueGetter _) => Value;
+    public Number Eval(Func<Variable, Number> _) => Value;
 
     public static Number Abs(Number value) => new(Math.Abs(value.Value));
     public static Number Pow(Number value) => new(Math.Pow(value.Value, 2));

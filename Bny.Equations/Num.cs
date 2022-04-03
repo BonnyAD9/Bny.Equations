@@ -17,13 +17,13 @@ public class Num : Operation
     /// <param name="n"></param>
     public Num(Number n) : base(n, Number.One) { }
 
-    public override Number Eval(ValueGetter _) => Coefficient;
+    public override Number Eval(Func<Variable, Number> _) => Coefficient;
     public override bool IsSame(Operation other) => other is Num;
     public override Operation With(Number coeffitient, Number power) => new Num(coeffitient);
 
-    public override Expression ToExpression(VariableGetter _) => Expression.Constant(Coefficient.Value, typeof(double));
+    public override Expression ToExpression(Func<Variable, Expression> _) => Expression.Constant(Coefficient.Value, typeof(double));
 
-    public override bool TryDerive(VariablePredicate _, out Operation? derivative)
+    public override bool TryDerive(Func<Variable, bool> _, out Operation? derivative)
     {
         derivative = null;
         return true;

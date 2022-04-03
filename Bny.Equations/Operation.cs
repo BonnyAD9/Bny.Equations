@@ -36,11 +36,11 @@ public abstract class Operation : IFormattable, IEvaluatable, IExpressable, IDer
     /// <returns>New Operation of the same type that derives it</returns>
     public abstract Operation With(Number coefficient, Number power);
 
-    public abstract Number Eval(ValueGetter vg);
+    public abstract Number Eval(Func<Variable, Number> vg);
 
-    public abstract Expression ToExpression(VariableGetter p);
+    public abstract Expression ToExpression(Func<Variable, Expression> p);
 
-    public abstract bool TryDerive(VariablePredicate v, out Operation? derivative);
+    public abstract bool TryDerive(Func<Variable, bool> v, out Operation? derivative);
 
     /// <summary>
     /// Gets value indicating whether the body of this instance is same as the other
