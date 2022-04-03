@@ -301,5 +301,5 @@ public class Function : IEvaluatable
     public static implicit operator Func<Number, Number>(Function f) => (n) => f.Eval(n);
     public static implicit operator Func<double, double>(Function f) => (n) => f.Eval(n);
 
-    public override string ToString() => string.Join(' ', Elements);
+    public override string ToString() => string.Join(' ', Elements.Where(p => p.Coefficient != Number.Zero));
 }

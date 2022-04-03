@@ -1,16 +1,16 @@
 ﻿using Bny.Equations;
 
 // Creating function in this library
-Variable x = Identifier.X;
-var function = 2 + 1/(x^2) + 6*x + 6 - 10*(x^-3) + (x^1.0/4);
+Variable x = VID.X, y = VID.Y;
+var function = -5*(x^-1) + (x^2) + 100*y;
 
 // Creating function using delegate
-var de1egate = (double x) => 2 + 1 / Math.Pow(x, 2) + 6 * x + 6 - 10 * Math.Pow(x, -3) + Math.Pow(x, 1.0 / 4);
+var de1egate = (double x, double y) => -5 * Math.Pow(x, -1) + Math.Pow(x, 2) + 100 * y;
 
 // Evaluating functions
 Console.WriteLine("      function delegate");
 for (int i = 0; i < 10; i++)
-    Console.WriteLine($"f({i}) = {function.Eval(i),6:.##} = {de1egate(i):.##}");
+    Console.WriteLine($"f({i}) = {function.Eval(v => v.ID switch { VID.X => i, VID.Y => i * 2, _ => Number.NaN}),7:.##} = {de1egate(i, i * 2):.##}");
 
 // printing functions
 Console.WriteLine();
@@ -31,7 +31,10 @@ var res = DateTime.Now - dt;
 Console.WriteLine($"Function: {res.TotalSeconds} s / {count} runs");
 dt = DateTime.Now;
 for (int i = 0; i < count; i++)
-    de1egate(r.NextDouble());
+{
+    var num = r.NextDouble();
+    de1egate(num, num);
+}
 var res2 = DateTime.Now - dt;
 Console.WriteLine($"Delegate: {res2.TotalSeconds} s / {count} runs");
 
@@ -39,24 +42,24 @@ Console.WriteLine($"Functions are about {res.TotalSeconds / res2.TotalSeconds:0.
 
 /* Console output:
       function delegate
-f(0) =    NaN = NaN
-f(1) =      6 = 6
-f(2) =  20.19 = 20.19
-f(3) =  27.06 = 27.06
-f(4) =  33.32 = 33.32
-f(5) =  39.46 = 39.46
-f(6) =  45.55 = 45.55
-f(7) =  51.62 = 51.62
-f(8) =  57.68 = 57.68
-f(9) =  63.73 = 63.73
+f(0) =      -? = -?
+f(1) =     196 = 196
+f(2) =   401.5 = 401.5
+f(3) =  607.33 = 607.33
+f(4) =  814.75 = 814.75
+f(5) =    1024 = 1024
+f(6) = 1235.17 = 1235.17
+f(7) = 1448.29 = 1448.29
+f(8) = 1663.38 = 1663.38
+f(9) = 1880.44 = 1880.44
 
 Printing funtion:
--10x^-3 +1x^-2 +1x^0.25 +8 +6x^1
++100y -5/x +x^2
 Printing delegate:
-System.Func`2[System.Double,System.Double]
+System.Func`3[System.Double,System.Double,System.Double]
 
 Benchmark:
-Function: 0.2605436 s / 1000000 runs
-Delegate: 0.0906862 s / 1000000 runs
-Functions are about 2.87 times slower than delegates
+Function: 0.254189 s / 1000000 runs
+Delegate: 0.0639918 s / 1000000 runs
+Functions are about 3.97 times slower than delegates
  */

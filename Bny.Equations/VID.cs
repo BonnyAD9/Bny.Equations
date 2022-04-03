@@ -1,6 +1,6 @@
 ﻿namespace Bny.Equations;
 
-public enum Identifier : long
+public enum VID : long
 {
     A = int.MaxValue + 1L, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
     A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
@@ -39,6 +39,6 @@ public static class Identifiers
     /// </summary>
     /// <param name="num">Number specifieng the identifier</param>
     /// <returns>Identifier from that number without name</returns>
-    public static Identifier GetNew(int num) => (Identifier)num;
-    internal static Identifier Get(long num) => (Identifier)num;
+    public static VID GetNew(int num) => (VID)num;
+    internal static VID Get(long num) => (VID)num;
 }

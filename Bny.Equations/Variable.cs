@@ -8,7 +8,7 @@ public class Variable : IEvaluatable
     /// <summary>
     /// Name of the variable should be unique for the equation
     /// </summary>
-    public Identifier ID { get; init; }
+    public VID ID { get; init; }
     /// <summary>
     /// Variables can behave as constants when they have value
     /// </summary>
@@ -17,7 +17,7 @@ public class Variable : IEvaluatable
     /// <summary>
     /// Gets value indicating whether this variable is valid, if not it is ignored
     /// </summary>
-    public bool IsValid => ID != Identifier.Invalid;
+    public bool IsValid => ID != VID.Invalid;
 
     /// <summary>
     /// Gets value indicating whether the variable has set value
@@ -27,23 +27,23 @@ public class Variable : IEvaluatable
     /// <summary>
     /// Invalid variable
     /// </summary>
-    public static readonly Variable Invalid = new(Identifier.Invalid);
+    public static readonly Variable Invalid = new(VID.Invalid);
 
     /// <summary>
     /// Initializes new variable with the given id
     /// </summary>
     /// <param name="id">Unique id of the variable</param>
-    public Variable(Identifier id) : this(id, Number.NaN) { }
+    public Variable(VID id) : this(id, Number.NaN) { }
 
     /// <summary>
     /// Initializes variable with value and id
     /// </summary>
     /// <param name="id">Unique id</param>
     /// <param name="value">Value of the variable, will act as constant</param>
-    public Variable(Identifier id, Number value)
+    public Variable(VID id, Number value)
     {
         ID = id;
-        Value = id == Identifier.Invalid ? Number.One : value;
+        Value = id == VID.Invalid ? Number.One : value;
     }
 
     public static bool operator ==(Variable a, Variable b) => a.ID == b.ID;
@@ -98,7 +98,7 @@ public class Variable : IEvaluatable
     /// <returns></returns>
     public static Element operator ^(Variable v, int a) => new(v, a);
 
-    public static implicit operator Variable(Identifier i) => new(i);
+    public static implicit operator Variable(VID i) => new(i);
 
     public override bool Equals(object? obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();

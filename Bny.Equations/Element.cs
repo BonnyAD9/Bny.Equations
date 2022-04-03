@@ -134,14 +134,28 @@ public class Element : Operation, IEquatable<Element>
     public override bool Equals(object? obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();
 
-    public override string ToString() => IsConstant ? $"{(Coefficient > 0 ? "+" : "")}{Coefficient:0.##}" : $"{(Coefficient > 0 ? "+" : "")}{Coefficient:0.##}{Variable}^{Power:0.##}";
+    public override string ToString() => ToString("0.##", null);
 
     public override Operation With(Number coeffitient, Number power) => new Element(coeffitient, Variable, power);
 
     public override bool IsSame(Operation other) => other is Element o && o.Variable == Variable;
 
-    public override string ToString(string? format, IFormatProvider? formatProvider)
-        => IsConstant
-            ? $"{(Coefficient > 0 ? "+" : "")}{Coefficient.ToString(format, formatProvider)}"
-            : $"{(Coefficient > 0 ? "+" : "")}{Coefficient.ToString(format, formatProvider)}{Variable}^{Power.ToString(format, formatProvider):0.##}";
+    public override string ToString(string? format, IFormatProvider? formatProvider) => (IsConstant, Power.Value, Coefficient.Value) switch
+    {
+        (_, _, 0) => $"+{0.ToString(format, formatProvider)}",
+        (true, _, > 0) or (_, 0, > 0) => $"+{Coefficient.ToString(format, formatProvider)}",
+        (true, _, _) or (_, 0, _) => Coefficient.ToString(format, formatProvider),
+        (_, 1, 1) => $"+{Variable}",
+        (_, 1, -1) => $"-{Variable}",
+        (_, 1, > 0) => $"+{Coefficient.ToString(format, formatProvider)}{Variable}",
+        (_, 1, _) => $"{Coefficient.ToString(format, formatProvider)}{Variable}",
+        (_, -1, > 0) => $"+{Coefficient.ToString(format, formatProvider)}/{Variable}",
+        (_, -1, _) => $"{Coefficient.ToString(format, formatProvider)}/{Variable}",
+        (_, < 0, > 0) => $"+{Coefficient.ToString(format, formatProvider)}/{Variable}^{Power.ToString(format, formatProvider)}",
+        (_, < 0, _) => $"{Coefficient.ToString(format, formatProvider)}/{Variable}^{Power.ToString(format, formatProvider)}",
+        (_, _, 1) => $"+{Variable}^{Power.ToString(format, formatProvider)}",
+        (_, _, -1) => $"-{Variable}^{Power.ToString(format, formatProvider)}",
+        (_, _, > 0) => $"+{Coefficient.ToString(format, formatProvider)}{Variable}^{Power.ToString(format, formatProvider)}",
+        _ => $"{Coefficient.ToString(format, formatProvider)}{Variable}^{Power.ToString(format, formatProvider)}",
+    };
 }
