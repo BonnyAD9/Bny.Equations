@@ -1,9 +1,11 @@
-﻿namespace Bny.Equations;
+﻿using System.Linq.Expressions;
+
+namespace Bny.Equations;
 
 /// <summary>
 /// Variable
 /// </summary>
-public class Variable : IEvaluatable
+public class Variable : IEvaluatable, IExpressable
 {
     /// <summary>
     /// Name of the variable should be unique for the equation
@@ -105,4 +107,6 @@ public class Variable : IEvaluatable
     public override string ToString() => ID.ToString().ToLower();
 
     public Number Eval(ValueGetter vg) => vg(this);
+
+    public Expression ToExpression(VariableGetter p) => p(this);
 }

@@ -1,4 +1,6 @@
-﻿namespace Bny.Equations;
+﻿using System.Linq.Expressions;
+
+namespace Bny.Equations;
 
 /// <summary>
 /// Variable raised to a power and multiplied by a coefficient
@@ -85,6 +87,17 @@ public class Element : Operation, IEquatable<Element>
     }
 
     public override Number Eval(ValueGetter vg) => IsConstant ? Coefficient : Coefficient * (vg(Variable) ^ Power);
+
+    public override Expression ToExpression(VariableGetter p)
+    {
+        if (IsConstant || Power == Number.Zero)
+            return Expression.Constant(Coefficient.Value, typeof(double));
+
+        var coef = Expression.Constant(Coefficient.Value, typeof(double));
+        var pow = Expression.Constant(Power.Value, typeof(double));
+        var call = Expression.Call(typeof(Math).GetMethod("Pow")!, p(Variable), pow);
+        return Expression.Multiply(coef, call);
+    }
 
     public static bool operator ==(Element a, Element b) => a.Variable == b.Variable && a.Coefficient == b.Coefficient && a.Power == b.Power;
     public static bool operator !=(Element a, Element b) => a.Variable != b.Variable || a.Coefficient != b.Coefficient || a.Power != b.Power;

@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 
 namespace Bny.Equations;
 
 /// <summary>
 /// Represents mathematical operation
 /// </summary>
-public abstract class Operation : IFormattable, IEvaluatable
+public abstract class Operation : IFormattable, IEvaluatable, IExpressable
 {
     /// <summary>
     /// Multiplier of a value
@@ -36,6 +37,8 @@ public abstract class Operation : IFormattable, IEvaluatable
     public abstract Operation With(Number coefficient, Number power);
 
     public abstract Number Eval(ValueGetter vg);
+
+    public abstract Expression ToExpression(VariableGetter p);
 
     /// <summary>
     /// Gets value indicating whether the body of this instance is same as the other

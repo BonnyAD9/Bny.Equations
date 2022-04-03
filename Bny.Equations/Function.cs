@@ -1,8 +1,9 @@
-﻿using System.Text;
+﻿using System.Linq.Expressions;
+using System.Text;
 
 namespace Bny.Equations;
 
-public class Function : IEvaluatable
+public class Function : IEvaluatable, IExpressable
 {
     private LinkedList<Operation> Elements { get; init; }
     private LinkedListNode<Operation> Constant { get; init; }
@@ -134,6 +135,18 @@ public class Function : IEvaluatable
         foreach (var e in Elements)
             res += e.Eval(vg);
         return res;
+    }
+
+    public Expression ToExpression(VariableGetter p)
+    {
+        Expression e = CNum.ToExpression(p);
+        foreach (var el in Elements)
+        {
+            if (el is Num)
+                continue;
+            e = Expression.Add(e, el.ToExpression(p));
+        }
+        return e;
     }
 
     /// <summary>

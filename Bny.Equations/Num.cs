@@ -1,4 +1,6 @@
-﻿namespace Bny.Equations;
+﻿using System.Linq.Expressions;
+
+namespace Bny.Equations;
 
 /// <summary>
 /// Represents a constant
@@ -18,6 +20,8 @@ public class Num : Operation
     public override Number Eval(ValueGetter _) => Coefficient;
     public override bool IsSame(Operation other) => other is Num;
     public override Operation With(Number coeffitient, Number power) => new Num(coeffitient);
+
+    public override Expression ToExpression(VariableGetter _) => Expression.Constant(Coefficient.Value, typeof(double));
 
     public override string ToString() => $"{(Coefficient > 0 ? "+" : "")}{Coefficient}";
     public override string ToString(string? format, IFormatProvider? formatProvider) => $"{(Coefficient > 0 ? "+" : "")}{Coefficient.ToString(format, formatProvider)}";
