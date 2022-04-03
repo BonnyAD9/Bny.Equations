@@ -5,7 +5,7 @@ namespace Bny.Equations;
 /// <summary>
 /// Variable
 /// </summary>
-public class Variable : IEvaluatable, IExpressable
+public class Variable : IEvaluatable, IExpressable, IDerivable<Num>
 {
     /// <summary>
     /// Name of the variable should be unique for the equation
@@ -46,6 +46,16 @@ public class Variable : IEvaluatable, IExpressable
     {
         ID = id;
         Value = id == VID.Invalid ? Number.One : value;
+    }
+
+    public Number Eval(ValueGetter vg) => vg(this);
+
+    public Expression ToExpression(VariableGetter p) => p(this);
+
+    public bool TryDerive(VariablePredicate predicate, out Num? derivative)
+    {
+        derivative = predicate(this) ? new(1) : null;
+        return true;
     }
 
     public static bool operator ==(Variable a, Variable b) => a.ID == b.ID;
@@ -105,8 +115,4 @@ public class Variable : IEvaluatable, IExpressable
     public override bool Equals(object? obj) => base.Equals(obj);
     public override int GetHashCode() => base.GetHashCode();
     public override string ToString() => ID.ToString().ToLower();
-
-    public Number Eval(ValueGetter vg) => vg(this);
-
-    public Expression ToExpression(VariableGetter p) => p(this);
 }

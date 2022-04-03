@@ -23,6 +23,12 @@ public class Num : Operation
 
     public override Expression ToExpression(VariableGetter _) => Expression.Constant(Coefficient.Value, typeof(double));
 
+    public override bool TryDerive(VariablePredicate _, out Operation? derivative)
+    {
+        derivative = null;
+        return true;
+    }
+
     public override string ToString() => $"{(Coefficient > 0 ? "+" : "")}{Coefficient}";
     public override string ToString(string? format, IFormatProvider? formatProvider) => $"{(Coefficient > 0 ? "+" : "")}{Coefficient.ToString(format, formatProvider)}";
 

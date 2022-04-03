@@ -6,7 +6,7 @@ namespace Bny.Equations;
 /// <summary>
 /// Represents mathematical operation
 /// </summary>
-public abstract class Operation : IFormattable, IEvaluatable, IExpressable
+public abstract class Operation : IFormattable, IEvaluatable, IExpressable, IDerivable<Operation>
 {
     /// <summary>
     /// Multiplier of a value
@@ -39,6 +39,8 @@ public abstract class Operation : IFormattable, IEvaluatable, IExpressable
     public abstract Number Eval(ValueGetter vg);
 
     public abstract Expression ToExpression(VariableGetter p);
+
+    public abstract bool TryDerive(VariablePredicate v, out Operation? derivative);
 
     /// <summary>
     /// Gets value indicating whether the body of this instance is same as the other

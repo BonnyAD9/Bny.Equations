@@ -99,6 +99,18 @@ public class Element : Operation, IEquatable<Element>
         return Expression.Multiply(coef, call);
     }
 
+    public override bool TryDerive(VariablePredicate predicate, out Operation? derivative)
+    {
+        if (!predicate(Variable))
+        {
+            derivative = null;
+            return true;
+        }
+
+        derivative = Power == Number.One ? new Num(Coefficient) : new Element(Coefficient * Power, Variable, Power - Number.One);
+        return true;
+    }
+
     public static bool operator ==(Element a, Element b) => a.Variable == b.Variable && a.Coefficient == b.Coefficient && a.Power == b.Power;
     public static bool operator !=(Element a, Element b) => a.Variable != b.Variable || a.Coefficient != b.Coefficient || a.Power != b.Power;
     public static bool operator <(Element a, Element b) => a.Power < b.Power;
