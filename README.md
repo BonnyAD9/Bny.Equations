@@ -7,7 +7,7 @@ Functions (evaluation):
 
 ## Example
 ### Code
-```[C#]
+```C#
 using Bny.Equations;
 
 // Creating function using delegates
